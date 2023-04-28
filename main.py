@@ -18,5 +18,5 @@ if __name__ == '__main__':
     count_df['date'] = pd.to_datetime(count_df['date'])
     count_df = count_df[['date', 'average_interest']]
     btc_prices['Date'] = pd.to_datetime(btc_prices['Date'])
-    df = pd.merge(count_df, btc_prices, left_on='date', right_on='Date',how='inner')
+    print_df = pd.merge(count_df, btc_prices, left_on='date', right_on='Date',how='inner')
 
