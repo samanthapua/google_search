@@ -2,6 +2,7 @@ from pytrends.request import TrendReq
 import pandas as pd
 import geopandas as gpd
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
 from matplotlib.colors import LinearSegmentedColormap
 
 btc_prices = pd.read_csv('./historical_btc_prices.csv', usecols=['Date', 'Close', 'Volume'])
@@ -24,26 +25,22 @@ if __name__ == '__main__':
     count_df = count_df[['date', 'average_interest']]
     btc_prices['Date'] = pd.to_datetime(btc_prices['Date'])
     data = pd.merge(count_df, btc_prices, left_on='date', right_on='Date', how='inner')
-
-    fig, ax = plt.subplots(figsize=(10, 6))
-
-    ax.plot(data['date'], data['average_interest'], color='blue')
-    ax.set_ylabel('Average Interest')
-
-    ax.plot(data['date'], data['Close'], color='green')
-    ax.set_ylabel('BTC Price')
-
-    # ax.plot(data['date'], data['Volume'], color='orange')
-    # ax.set_ylabel('Volume')
-
-    fig.suptitle('Average Interest, Price, and Volume Over Time')
-    ax.set_xlabel('Date')
-
-    # Adjust the layout
-    fig.tight_layout()
-
-    # Show the plot
-    plt.show()
+    years = mdates.YearLocator()
+    months = mdates.MonthLocator()
+    years_format = mdates.DateFormatter('%Y')
+    plt.figure(figsize=(14,8),dpi=120)
+    plt.title('BTC Price vs Google Search',fontsize=12)
+    ax1 = plt.gca()
+    ax2 = ax1.twinx()
+    ax1.set_ylabel('BTC Price',color='orange',fontsize=10)
+    ax2.set_ylabel('Search Trend Index',color='green',fontsize=10)
+    ax1.plot(data.Date, data.Close,color='orange',linewidth=2,linestyle='--')
+    ax2.plot(data.Date, data.average_interest,color='green',linewidth=2,marker='.')
+    ax1.xaxis.set_major_locator(years)
+    ax1.xaxis.set_major_formatter(years_format)
+    ax1.xaxis.set_minor_locator(months)
+    ax1.grid(color='grey',linestyle='--')
+    # plt.show()
 
     'Geomap code'
     world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
