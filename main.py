@@ -62,4 +62,4 @@ if __name__ == '__main__':
         if row['Bitcoin'] > 80:
             ax.annotate(row['name'], xy=row['geometry'].centroid.coords[0], ha='center', va='center', fontsize=5, color='black', fontweight='bold')
 
-    #plt.show()
+    plt.show()
